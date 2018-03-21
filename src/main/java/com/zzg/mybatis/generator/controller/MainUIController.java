@@ -7,12 +7,16 @@ import com.zzg.mybatis.generator.model.UITableColumnVO;
 import com.zzg.mybatis.generator.util.ConfigHelper;
 import com.zzg.mybatis.generator.util.DbUtil;
 import com.zzg.mybatis.generator.util.MyStringUtils;
+import com.zzg.mybatis.generator.util.TimeDialog;
 import com.zzg.mybatis.generator.view.AlertUtil;
 import com.zzg.mybatis.generator.view.UIProgressCallback;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.scene.control.Label;
+import javafx.scene.control.MenuItem;
+import javafx.scene.control.TextField;
 import javafx.scene.control.cell.TextFieldTreeCell;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
@@ -27,6 +31,8 @@ import org.mybatis.generator.config.IgnoredColumn;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.swing.*;
+import java.awt.*;
 import java.io.File;
 import java.net.URL;
 import java.sql.SQLRecoverableException;
@@ -44,6 +50,8 @@ public class MainUIController extends BaseFXController {
     private Label connectionLabel;
     @FXML
     private Label configsLabel;
+//    @FXML
+//    private Label searchLabel;
     @FXML
     private TextField modelTargetPackage;
     @FXML
@@ -52,10 +60,18 @@ public class MainUIController extends BaseFXController {
     private TextField daoTargetPackage;
     @FXML
     private TextField tableNameField;
+    /**
+     * 搜索条件 输入框
+     */
+    @FXML
+    private TextField searchTable;
     @FXML
     private TextField domainObjectNameField;
+    /**
+     * 添加输入框
+     */
     @FXML
-    private TextField generateKeysField;	//添加输入框
+    private TextField generateKeysField;
     @FXML
     private TextField modelTargetProject;
     @FXML
@@ -112,7 +128,17 @@ public class MainUIController extends BaseFXController {
             controller.setMainUIController(this);
             controller.showDialogStage();
         });
-
+        /*设置搜索按钮图片背景*/
+//        ImageView searchImage = new ImageView("icons/search.jpg");
+//        searchImage.setFitHeight(40);
+//        searchImage.setFitWidth(40);
+//        searchLabel.setGraphic(searchImage);
+//        searchLabel.setOnMouseClicked(event -> {
+//            GeneratorConfigController controller = (GeneratorConfigController) loadFXMLPage("搜索表名", FXMLPage.GENERATOR_CONFIG, false);
+//            controller.setMainUIController(this);
+//            controller.showDialogStage();
+//        });
+        /*左边数据库树*/
         leftDBTree.setShowRoot(false);
         leftDBTree.setRoot(new TreeItem<>());
         Callback<TreeView<String>, TreeCell<String>> defaultCellFactory = TextFieldTreeCell.forTreeView();
@@ -178,8 +204,11 @@ public class MainUIController extends BaseFXController {
                         String tableName = treeCell.getTreeItem().getValue();
                         selectedDatabaseConfig = (DatabaseConfig) treeItem.getParent().getGraphic().getUserData();
                         this.tableName = tableName;
+                        // 设置表名
                         tableNameField.setText(tableName);
-                        domainObjectNameField.setText(MyStringUtils.dbStringToCamelStyle(tableName));
+                        // 自动设置表实体名称
+                        domainObjectNameField.setText(MyStringUtils.dbStringToCamelStyle(tableName)+"Entity");
+                        mapperName.setText(MyStringUtils.dbStringToCamelStyle(tableName)+"Dao");
                     }
                 }
             });
@@ -190,6 +219,9 @@ public class MainUIController extends BaseFXController {
         encodingChoice.setValue("UTF-8");
     }
 
+    /**
+     * 初始化左边树
+     */
     void loadLeftDBTree() {
         TreeItem rootTreeItem = leftDBTree.getRoot();
         rootTreeItem.getChildren().clear();
@@ -325,6 +357,9 @@ public class MainUIController extends BaseFXController {
         encodingChoice.setValue(generatorConfig.getEncoding());
     }
 
+    /**
+     * 定制列事件
+     */
     @FXML
     public void openTableColumnCustomizationPage() {
         if (tableName == null) {
@@ -347,6 +382,64 @@ public class MainUIController extends BaseFXController {
         }
     }
 
+    /**
+     * 搜索按钮事件
+     */
+    @FXML
+    public void searchTableColumnCustomizationPage() {
+        // 获取左边选中的数据库节点
+        TreeItem<String> treeItem = leftDBTree.getSelectionModel().getSelectedItem();
+        if (treeItem == null) {
+            AlertUtil.showWarnAlert("请先在左侧选择数据库节点！");
+            return;
+        }
+        String id = treeItem.getGraphic().getId();
+        // 查询是否存在用户信息
+        Object userData = treeItem.getGraphic().getUserData();
+
+        if (userData == null) {
+            AlertUtil.showWarnAlert("请选择数据库节点！");
+            return;
+        }
+        DatabaseConfig selectedConfig = (DatabaseConfig) treeItem.getGraphic().getUserData();
+        if (selectedConfig == null) {
+            AlertUtil.showWarnAlert("请先在左侧选择数据库");
+            return;
+        }
+        // 获取搜索框的过滤条件
+        String query = searchTable.getText();
+        try {
+            List<String> tables = DbUtil.getSearchTableNames(selectedConfig, query);
+            // 设置树节点为展开
+            treeItem.setExpanded(true);
+            if (tables != null && tables.size() > 0) {
+                ObservableList<TreeItem<String>> children = treeItem.getChildren();
+                // 清除当前节点的数据
+                children.clear();
+                // 遍历添加查询的数据
+                for (String tableName : tables) {
+                    // 创建节点
+                    TreeItem<String> newTreeItem = new TreeItem<>();
+                    ImageView imageView = new ImageView("icons/table.png");
+                    imageView.setFitHeight(16);
+                    imageView.setFitWidth(16);
+                    newTreeItem.setGraphic(imageView);
+                    newTreeItem.setValue(tableName);
+                    children.add(newTreeItem);
+                }
+                // 弹框提示成功消息
+                TimeDialog d = new TimeDialog();
+                // TimerTest是程序主窗口类，弹出的对话框10秒后消失
+                d.showDialog(new JFrame(), Color.GREEN, "数据查询成功?", 1);
+            }
+        } catch (SQLRecoverableException e) {
+            _LOG.error(e.getMessage(), e);
+            AlertUtil.showErrorAlert("连接超时");
+        } catch (Exception e) {
+            _LOG.error(e.getMessage(), e);
+            AlertUtil.showErrorAlert(e.getMessage());
+        }
+    }
     public void setIgnoredColumns(List<IgnoredColumn> ignoredColumns) {
         this.ignoredColumns = ignoredColumns;
     }

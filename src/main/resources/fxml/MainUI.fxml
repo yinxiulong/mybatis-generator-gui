@@ -19,17 +19,39 @@
                             <cursor>
                                 <Cursor fx:constant="HAND" />
                             </cursor>
-                     <font>
-                        <Font size="14.0" />
-                     </font>
-                     <padding>
-                        <Insets left="10.0" right="10.0" />
-                     </padding>
+                             <font>
+                                <Font size="14.0" />
+                             </font>
+                             <padding>
+                                <Insets left="10.0" right="10.0" />
+                             </padding>
                         </Label>
-                  <Label fx:id="configsLabel" contentDisplay="TOP" text="配置">
-                     <padding>
-                        <Insets right="10.0" />
-                     </padding></Label>
+                        <Label fx:id="configsLabel" contentDisplay="TOP" text="配置">
+                             <padding>
+                                <Insets right="10.0" />
+                             </padding>
+                        </Label>
+                       <!-- <Label fx:id="searchLabel" contentDisplay="TOP" text="搜索表名">
+                            <padding>
+                                <Insets right="10.0" />
+                            </padding>
+                        </Label>-->
+                        <!--自定义搜索框-->
+                        <TextField fx:id="searchTable" prefHeight="27.0" prefWidth="152.0" promptText="请输入表名..."  GridPane.columnIndex="1" GridPane.rowIndex="4">
+                            <HBox.margin>
+                                <Insets right="5.0" />
+                            </HBox.margin>
+                            <GridPane.margin>
+                                <Insets left="5.0" right="5.0" />
+                            </GridPane.margin>
+                        </TextField>
+                        <!--自定义按钮-->
+                        <Button mnemonicParsing="false" onAction="#searchTableColumnCustomizationPage" text="搜索">
+                            <styleClass>
+                                <String fx:value="btn" />
+                                <String fx:value="btn-search" />
+                            </styleClass>
+                        </Button>
                     </items>
                 </ToolBar>
             </children>
@@ -219,7 +241,7 @@
                                     <Insets left="5.0" />
                                  </padding>
                               </Label>
-                              <TextField fx:id="mapperName" prefHeight="27.0" prefWidth="138.0" promptText="PersonDAO" text="XxxxDao" GridPane.columnIndex="5" GridPane.rowIndex="5">
+                              <TextField fx:id="mapperName" prefHeight="27.0" prefWidth="138.0" promptText="PersonDAO" text="Dao" GridPane.columnIndex="5" GridPane.rowIndex="5">
                                  <GridPane.margin>
                                     <Insets left="5.0" />
                                  </GridPane.margin></TextField>

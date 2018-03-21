@@ -67,7 +67,8 @@ public class DbConnectionController extends BaseFXController {
 		}
 		try {
 			DbUtil.getConnection(config);
-			AlertUtil.showInfoAlert("连接成功");
+//			AlertUtil.showInfoAlert("连接成功");
+			AlertUtil.showSuccessAlert("数据库连接成功！");
 		} catch (Exception e) {
 			_LOG.error(e.getMessage(), e);
 			AlertUtil.showWarnAlert("连接失败");

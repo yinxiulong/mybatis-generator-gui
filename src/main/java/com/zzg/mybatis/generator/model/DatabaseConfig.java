@@ -3,6 +3,7 @@ package com.zzg.mybatis.generator.model;
 import java.util.Objects;
 
 /**
+ * 数据库配置信息
  * Created by Owen on 5/13/16.
  */
 public class DatabaseConfig {
@@ -11,23 +12,37 @@ public class DatabaseConfig {
 	 * The primary key in the sqlite db
 	 */
 	private Integer id;
-
+	/**
+	 * 数据库类型
+	 */
 	private String dbType;
 	/**
 	 * The name of the config
 	 */
 	private String name;
-
+	/**
+	 * 数据库ip地址
+	 */
 	private String host;
-
+	/**
+	 * 端口号
+	 */
 	private String port;
-
+	/**
+	 * 数据库名称
+	 */
 	private String schema;
-
+	/**
+	 * 数据库用户名名称
+	 */
 	private String username;
-
+	/**
+	 * 数据库用户密码
+	 */
 	private String password;
-
+	/**
+	 * 数据库编码
+	 */
 	private String encoding;
 
 	public Integer getId() {
