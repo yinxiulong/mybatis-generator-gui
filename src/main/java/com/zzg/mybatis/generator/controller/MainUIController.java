@@ -50,7 +50,7 @@ public class MainUIController extends BaseFXController {
     private Label connectionLabel;
     @FXML
     private Label configsLabel;
-//    @FXML
+    //    @FXML
 //    private Label searchLabel;
     @FXML
     private TextField modelTargetPackage;
@@ -152,14 +152,14 @@ public class MainUIController extends BaseFXController {
                     final ContextMenu contextMenu = new ContextMenu();
                     MenuItem item1 = new MenuItem("关闭连接");
                     item1.setOnAction(event1 -> treeItem.getChildren().clear());
-	                MenuItem item2 = new MenuItem("编辑连接");
-	                item2.setOnAction(event1 -> {
-		                DatabaseConfig selectedConfig = (DatabaseConfig) treeItem.getGraphic().getUserData();
-		                DbConnectionController controller = (DbConnectionController) loadFXMLPage("编辑数据库连接", FXMLPage.NEW_CONNECTION, false);
-		                controller.setMainUIController(this);
-		                controller.setConfig(selectedConfig);
-		                controller.showDialogStage();
-	                });
+                    MenuItem item2 = new MenuItem("编辑连接");
+                    item2.setOnAction(event1 -> {
+                        DatabaseConfig selectedConfig = (DatabaseConfig) treeItem.getGraphic().getUserData();
+                        DbConnectionController controller = (DbConnectionController) loadFXMLPage("编辑数据库连接", FXMLPage.NEW_CONNECTION, false);
+                        controller.setMainUIController(this);
+                        controller.setConfig(selectedConfig);
+                        controller.showDialogStage();
+                    });
                     MenuItem item3 = new MenuItem("删除连接");
                     item3.setOnAction(event1 -> {
                         DatabaseConfig selectedConfig = (DatabaseConfig) treeItem.getGraphic().getUserData();
@@ -207,8 +207,8 @@ public class MainUIController extends BaseFXController {
                         // 设置表名
                         tableNameField.setText(tableName);
                         // 自动设置表实体名称
-                        domainObjectNameField.setText(MyStringUtils.dbStringToCamelStyle(tableName)+"Entity");
-                        mapperName.setText(MyStringUtils.dbStringToCamelStyle(tableName)+"Dao");
+                        domainObjectNameField.setText(MyStringUtils.dbStringToCamelStyle(tableName) + "Entity");
+                        mapperName.setText(MyStringUtils.dbStringToCamelStyle(tableName) + "Dao");
                     }
                 }
             });
@@ -259,10 +259,10 @@ public class MainUIController extends BaseFXController {
             return;
         }
         String result = validateConfig();
-		if (result != null) {
-			AlertUtil.showErrorAlert(result);
-			return;
-		}
+        if (result != null) {
+            AlertUtil.showErrorAlert(result);
+            return;
+        }
         GeneratorConfig generatorConfig = getGeneratorConfigFromUI();
         if (!checkDirs(generatorConfig)) {
             return;
@@ -273,33 +273,33 @@ public class MainUIController extends BaseFXController {
         bridge.setDatabaseConfig(selectedDatabaseConfig);
         bridge.setIgnoredColumns(ignoredColumns);
         bridge.setColumnOverrides(columnOverrides);
-		UIProgressCallback alert = new UIProgressCallback(Alert.AlertType.INFORMATION);
-		bridge.setProgressCallback(alert);
-		alert.show();
-		try {
+        UIProgressCallback alert = new UIProgressCallback(Alert.AlertType.INFORMATION);
+        bridge.setProgressCallback(alert);
+        alert.show();
+        try {
             bridge.generate();
         } catch (Exception e) {
-			e.printStackTrace();
+            e.printStackTrace();
             AlertUtil.showErrorAlert(e.getMessage());
         }
     }
 
-	private String validateConfig() {
-		String projectFolder = projectFolderField.getText();
-		if (StringUtils.isEmpty(projectFolder))  {
-			return "项目目录不能为空";
-		}
-		if (StringUtils.isEmpty(domainObjectNameField.getText()))  {
-			return "类名不能为空";
-		}
-		if (StringUtils.isAnyEmpty(modelTargetPackage.getText(), mapperTargetPackage.getText(), daoTargetPackage.getText())) {
-			return "包名不能为空";
-		}
+    private String validateConfig() {
+        String projectFolder = projectFolderField.getText();
+        if (StringUtils.isEmpty(projectFolder)) {
+            return "项目目录不能为空";
+        }
+        if (StringUtils.isEmpty(domainObjectNameField.getText())) {
+            return "类名不能为空";
+        }
+        if (StringUtils.isAnyEmpty(modelTargetPackage.getText(), mapperTargetPackage.getText(), daoTargetPackage.getText())) {
+            return "包名不能为空";
+        }
 
-		return null;
-	}
+        return null;
+    }
 
-	@FXML
+    @FXML
     public void saveGeneratorConfig() {
         TextInputDialog dialog = new TextInputDialog("");
         dialog.setTitle("保存当前配置");
@@ -440,6 +440,7 @@ public class MainUIController extends BaseFXController {
             AlertUtil.showErrorAlert(e.getMessage());
         }
     }
+
     public void setIgnoredColumns(List<IgnoredColumn> ignoredColumns) {
         this.ignoredColumns = ignoredColumns;
     }
@@ -454,37 +455,37 @@ public class MainUIController extends BaseFXController {
      * @return
      */
     private boolean checkDirs(GeneratorConfig config) {
-		List<String> dirs = new ArrayList<>();
-		dirs.add(config.getProjectFolder());
-		dirs.add(FilenameUtils.normalize(config.getProjectFolder().concat("/").concat(config.getModelPackageTargetFolder())));
-		dirs.add(FilenameUtils.normalize(config.getProjectFolder().concat("/").concat(config.getDaoTargetFolder())));
-		dirs.add(FilenameUtils.normalize(config.getProjectFolder().concat("/").concat(config.getMappingXMLTargetFolder())));
-		boolean haveNotExistFolder = false;
-		for (String dir : dirs) {
-			File file = new File(dir);
-			if (!file.exists()) {
-				haveNotExistFolder = true;
-			}
-		}
-		if (haveNotExistFolder) {
-			Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-			alert.setContentText(FOLDER_NO_EXIST);
-			Optional<ButtonType> optional = alert.showAndWait();
-			if (optional.isPresent()) {
-				if (ButtonType.OK == optional.get()) {
-					try {
-						for (String dir : dirs) {
-							FileUtils.forceMkdir(new File(dir));
-						}
-						return true;
-					} catch (Exception e) {
-						AlertUtil.showErrorAlert("创建目录失败，请检查目录是否是文件而非目录");
-					}
-				} else {
-					return false;
-				}
-			}
-		}
+        List<String> dirs = new ArrayList<>();
+        dirs.add(config.getProjectFolder());
+        dirs.add(FilenameUtils.normalize(config.getProjectFolder().concat("/").concat(config.getModelPackageTargetFolder())));
+        dirs.add(FilenameUtils.normalize(config.getProjectFolder().concat("/").concat(config.getDaoTargetFolder())));
+        dirs.add(FilenameUtils.normalize(config.getProjectFolder().concat("/").concat(config.getMappingXMLTargetFolder())));
+        boolean haveNotExistFolder = false;
+        for (String dir : dirs) {
+            File file = new File(dir);
+            if (!file.exists()) {
+                haveNotExistFolder = true;
+            }
+        }
+        if (haveNotExistFolder) {
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+            alert.setContentText(FOLDER_NO_EXIST);
+            Optional<ButtonType> optional = alert.showAndWait();
+            if (optional.isPresent()) {
+                if (ButtonType.OK == optional.get()) {
+                    try {
+                        for (String dir : dirs) {
+                            FileUtils.forceMkdir(new File(dir));
+                        }
+                        return true;
+                    } catch (Exception e) {
+                        AlertUtil.showErrorAlert("创建目录失败，请检查目录是否是文件而非目录");
+                    }
+                } else {
+                    return false;
+                }
+            }
+        }
         return true;
     }
 

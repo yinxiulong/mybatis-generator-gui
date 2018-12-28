@@ -29,8 +29,8 @@ public class ConfigHelperTest {
     }
 
     @Test
-	public void testGetAllJDBCDriverJarPaths() {
-    	List<String> jarFilePaths = ConfigHelper.getAllJDBCDriverJarPaths();
-    	Assert.assertTrue(jarFilePaths != null && jarFilePaths.size() > 0);
+    public void testGetAllJDBCDriverJarPaths() {
+        List<String> jarFilePaths = ConfigHelper.getAllJDBCDriverJarPaths();
+        Assert.assertTrue(jarFilePaths != null && jarFilePaths.size() > 0);
     }
 }

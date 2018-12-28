@@ -1,9 +1,9 @@
 * {
-	-fx-font-size: 12px;
+    -fx-font-size: 12px;
 }
 
 .button {
-	-fx-font-size: 14px;
+    -fx-font-size: 14px;
 }
 
 .tool-bar .button {
@@ -17,12 +17,12 @@
 }
 
 .btn-primary {
-	-fx-background-color: #378bfa;
-	-fx-text-fill: white;
+    -fx-background-color: #378bfa;
+    -fx-text-fill: white;
 }
 
 .btn-primary:hover {
-	-fx-background-color: #579efa;
+    -fx-background-color: #579efa;
 }
 
 .btn-default {
@@ -47,20 +47,23 @@
     -fx-background-color: #5cb85c;
     -fx-border-color: #4cae4c;
 }
+
 .btn-search:hover {
     -fx-text-fill: #fff;
     -fx-background-color: #2319DC;
     -fx-border-color: #2319DC;
 }
+
 .btn-search {
     -fx-text-fill: #fff;
     -fx-background-color: #40B0D9;
     -fx-border-color: #40B0D9;
 }
+
 .consoleTextArea {
-	-fx-stroke: white;
-	-fx-fill: black;
-	-fx-background-color: black;
+    -fx-stroke: white;
+    -fx-fill: black;
+    -fx-background-color: black;
 }
 
 .consoleTextArea:focused {

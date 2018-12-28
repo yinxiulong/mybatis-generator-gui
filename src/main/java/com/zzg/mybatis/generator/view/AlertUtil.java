@@ -38,6 +38,7 @@ public class AlertUtil {
         // TimerTest是程序主窗口类，弹出的对话框10秒后消失
         d.showDialog(new JFrame(), Color.red, message, 3);
     }
+
     public static void showSuccessAlert(String message) {
 //        Alert alert = new Alert(Alert.AlertType.ERROR);
 //        alert.setContentText(message);
@@ -47,6 +48,7 @@ public class AlertUtil {
         // TimerTest是程序主窗口类，弹出的对话框10秒后消失
         d.showDialog(new JFrame(), Color.green, message, 3);
     }
+
     /**
      * build both OK and Cancel buttons for the user
      * to click on to dismiss the dialog.
